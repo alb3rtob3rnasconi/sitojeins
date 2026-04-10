@@ -8,15 +8,17 @@ const applicationUpdateSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     const application = await prisma.recruitmentApplication.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!application) {
@@ -31,11 +33,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = applicationUpdateSchema.parse(body)
 
     const application = await prisma.recruitmentApplication.update({
-      where: { id: params.id },
+      where: { id },
       data
     })
 
@@ -50,8 +53,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     await prisma.recruitmentApplication.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ success: true })

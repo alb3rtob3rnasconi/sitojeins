@@ -15,15 +15,17 @@ const projectSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     const project = await prisma.project.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!project) {
@@ -38,11 +40,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = projectSchema.parse(body)
 
     const project = await prisma.project.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: data.title,
         description: data.description,
@@ -70,8 +73,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     await prisma.project.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     // Invalida la cache delle pagine pubbliche e admin

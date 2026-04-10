@@ -15,15 +15,17 @@ const blogPostSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     const post = await prisma.blogPost.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!post) {
@@ -38,6 +40,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = blogPostSchema.parse(body)
 
@@ -45,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const existingPost = await prisma.blogPost.findFirst({
       where: { 
         slug: data.slug,
-        id: { not: params.id }
+        id: { not: id }
       }
     })
 
@@ -54,7 +57,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const post = await prisma.blogPost.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: data.title,
         slug: data.slug,
@@ -84,8 +87,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     await prisma.blogPost.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     // Invalida la cache delle pagine pubbliche e admin

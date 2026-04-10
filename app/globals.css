@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
   --insubria-600: #007161;
@@ -281,20 +282,22 @@ a {
 }
 
 /* Unified card dimensions */
-.card-standard {
-  @apply w-full md:w-80 lg:w-96;
-}
+@layer components {
+  .card-standard {
+    @apply w-full md:w-80 lg:w-96;
+  }
 
-.card-standard-sm {
-  @apply w-full max-w-sm;
-}
+  .card-standard-sm {
+    @apply w-full max-w-sm;
+  }
 
-.card-standard-md {
-  @apply w-full max-w-md;
-}
+  .card-standard-md {
+    @apply w-full max-w-md;
+  }
 
-.card-fixed-height {
-  @apply h-80;
+  .card-fixed-height {
+    @apply h-80;
+  }
 }
 
 /* TipTap Editor Styles */

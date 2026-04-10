@@ -10,15 +10,17 @@ const policyUpdateSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+    
     const policy = await prisma.policy.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!policy) {
@@ -33,11 +35,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = policyUpdateSchema.parse(body)
 
     const policy = await prisma.policy.update({
-      where: { id: params.id },
+      where: { id },
       data
     })
 
@@ -52,8 +55,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+    
     await prisma.policy.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ success: true })

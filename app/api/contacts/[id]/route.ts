@@ -12,15 +12,17 @@ const contactSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+    
     const contact = await prisma.contact.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!contact) {
@@ -35,11 +37,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = contactSchema.parse(body)
 
     const contact = await prisma.contact.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         type: data.type,
         value: data.value,
@@ -65,8 +68,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+    
     await prisma.contact.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     // Invalida la cache delle pagine pubbliche e admin

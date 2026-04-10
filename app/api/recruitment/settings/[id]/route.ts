@@ -16,18 +16,19 @@ const recruitmentSettingsSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = recruitmentSettingsSchema.parse(body)
 
     const recruitment = await prisma.recruitment.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         isOpen: data.isOpen,
         openDate: data.openDate ? new Date(data.openDate) : null,

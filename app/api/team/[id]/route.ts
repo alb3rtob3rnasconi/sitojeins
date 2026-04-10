@@ -13,15 +13,17 @@ const teamMemberSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     const member = await prisma.teamMember.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!member) {
@@ -36,11 +38,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = teamMemberSchema.parse(body)
 
     const member = await prisma.teamMember.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name: data.name,
         role: data.role,
@@ -67,8 +70,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     await prisma.teamMember.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     // Invalida la cache delle pagine pubbliche e admin

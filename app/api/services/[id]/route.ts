@@ -13,15 +13,17 @@ const serviceSchema = z.object({
 })
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     const service = await prisma.service.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!service) {
@@ -36,11 +38,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const data = serviceSchema.parse(body)
 
     const service = await prisma.service.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: data.title,
         description: data.description,
@@ -67,8 +70,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
+
     await prisma.service.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     // Invalida la cache delle pagine pubbliche e admin
