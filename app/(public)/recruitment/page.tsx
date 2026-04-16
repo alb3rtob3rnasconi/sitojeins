@@ -31,6 +31,10 @@ export default async function RecruitmentPage() {
   // Parse FAQs from database or use defaults
   const defaultFaqs = [
     {
+      question: "Quando aprono le candidature?",
+      answer: "Il recruitment apre due volte all'anno, una in autunno e una in primavera. Ti invitiamo a controllare sui nostri canali social per sapere quando viene aperto."
+    },
+    {
       question: "Come funziona il processo di selezione?",
       answer: "Il processo prevede una prima valutazione del CV, seguita da un colloquio conoscitivo e, se necessario, da un test pratico specifico per il ruolo."
     },
@@ -48,7 +52,15 @@ export default async function RecruitmentPage() {
     }
   ]
   
-  const faqs = recruitment?.faqs ? JSON.parse(recruitment.faqs) : defaultFaqs
+  const dbFaqs = recruitment?.faqs ? JSON.parse(recruitment.faqs) : []
+  const faqsToUse = dbFaqs.length > 0 ? dbFaqs : defaultFaqs
+  
+  // Assicuriamo che la faq personalizzata sia sempre la prima ad apparire
+  const faqApertura = {
+    question: "Quando aprono le candidature?",
+    answer: "Il recruitment apre due volte all'anno, una in autunno e una in primavera. Ti invitiamo a controllare sui nostri canali social per sapere quando viene aperto."
+  }
+  const faqs = [faqApertura, ...faqsToUse.filter((f: any) => f.question !== faqApertura.question)]
 
   return (
     <main>
@@ -66,14 +78,6 @@ export default async function RecruitmentPage() {
           <p className="text-xl max-w-3xl mx-auto">
             {recruitment?.description || "Candidati per diventare parte di JEIns e sviluppa le tue competenze professionali attraverso progetti reali e un ambiente stimolante."}
           </p>
-          {recruitment?.isOpen && (
-            <div className="mt-6">
-              <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white">
-                <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-                Recruitment aperto
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
@@ -105,6 +109,10 @@ export default async function RecruitmentPage() {
                 </h3>
                 <p className="text-neutral-500 mb-6">
                   Clicca il pulsante qui sotto per accedere al form di candidatura
+                </p>
+                
+                <p className="text-red-600 font-semibold mb-4 text-lg">
+                  Le candidature sono al momento chiuse
                 </p>
                 
                 <a

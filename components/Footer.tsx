@@ -16,8 +16,6 @@ export default async function Footer() {
   const emailContact = contacts.find(c => c.type === 'email')
   const phoneContact = contacts.find(c => c.type === 'phone')
   const addressContact = contacts.find(c => c.type === 'address')
-  const instagramContact = contacts.find(c => c.type === 'instagram')
-  const linkedinContact = contacts.find(c => c.type === 'linkedin')
 
   return (
     <footer className="bg-insubria-50 border-t border-neutral-100">
@@ -52,10 +50,10 @@ export default async function Footer() {
           <div>
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Seguici</h3>
             <div className="flex space-x-4">
-              <a href={instagramContact?.value || "#"} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
+              <a href="https://www.instagram.com/jeins.consulting/" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
                 <Instagram size={20} />
               </a>
-              <a href={linkedinContact?.value || "#"} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
+              <a href="https://it.linkedin.com/company/jeins" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
                 <Linkedin size={20} />
               </a>
             </div>

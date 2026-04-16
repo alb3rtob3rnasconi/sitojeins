@@ -1,121 +1,62 @@
-import { prisma } from '@/lib/prisma'
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { Calendar, FileText, Cookie } from 'lucide-react'
-import CookiePreferencesButton from '@/components/CookiePreferencesButton'
-
-// Ricarica i dati ogni 60 secondi
-export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy - JEIns | Gestione Cookie e Tecnologie Simili',
-  description: 'Cookie Policy di JEIns - Junior Enterprise Insubria. Informazioni sui cookie utilizzati, finalità e gestione delle preferenze.',
-  keywords: 'cookie policy, cookie, tecnologie simili, JEIns, Junior Enterprise Insubria, preferenze cookie',
-  openGraph: {
-    title: 'Cookie Policy - JEIns',
-    description: 'Cookie Policy di JEIns - Junior Enterprise Insubria',
-    url: 'https://jeins.it/cookie-policy',
-  },
-  alternates: {
-    canonical: 'https://jeins.it/cookie-policy',
-  },
+  title: 'Cookie Policy - JEIns Consulting',
+  description: 'Informativa sull&apos;uso dei cookie di JEIns Consulting.',
 }
 
-async function getCookiePolicy() {
-  const policy = await prisma.policy.findFirst({
-    where: { 
-      type: 'cookie',
-      isActive: true 
-    }
-  })
-
-  if (!policy) {
-    notFound()
-  }
-
-  return policy
-}
-
-export default async function CookiePolicyPage() {
-  const policy = await getCookiePolicy()
-
+export default function CookiePolicyPage() {
   return (
-    <main>
-      {/* Hero Section */}
-      <section className="py-20 section-green relative overflow-hidden">
-        <div className="decorative-corner top-0 right-0" style={{clipPath: 'polygon(100% 0, 100% 100%, 0 0)'}}></div>
-        <div className="decorative-corner-bottom-right bottom-0 left-0" style={{clipPath: 'polygon(0 0, 100% 100%, 0 100%)'}}></div>
-        <div className="decorative-strip decorative-strip-bottom"></div>
-        
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="bg-white/20 p-4 rounded-2xl">
-              <Cookie className="h-12 w-12 text-white" />
-            </div>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 newspaper-headline">
+    <main className="py-20 section-white relative overflow-hidden">
+      {/* Elementi decorativi */}
+      <div className="decorative-corner top-0 left-0"></div>
+      <div className="decorative-corner-bottom-right bottom-0 right-0"></div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold mb-6 newspaper-headline">
             Cookie Policy
           </h1>
-          <p className="text-xl max-w-3xl mx-auto">
-            Informazioni sui cookie e tecnologie simili utilizzate dal sito
+          <p className="text-neutral-500 italic mb-8">
+            JEINS CONSULTING - 2025/2026
           </p>
         </div>
-      </section>
 
-      {/* Policy Content */}
-      <section className="py-16 section-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Policy Header */}
-          <div className="bg-white border-2 border-insubria-200 rounded-2xl p-8 mb-8 shadow-sm">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-insubria-600 p-3 rounded-2xl">
-                <FileText className="text-white" size={32} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-insubria-600">{policy.title}</h2>
-                <div className="flex items-center gap-4 text-sm text-neutral-500 mt-2">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>Versione {policy.version}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>Ultima modifica: {new Date(policy.updatedAt).toLocaleDateString('it-IT')}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="prose prose-neutral max-w-none space-y-8 text-neutral-600">
+          <section>
+            <h2 className="text-2xl font-bold text-insubria-600 mb-4">Informativa e impostazione del sistema cookie</h2>
+            <p>
+              JEIns adotta soluzioni organizzative e tecniche idonee a garantire che i cookie non necessari non siano installati prima della manifestazione di un valido consenso, ove richiesto.
+            </p>
+            <p>
+              La configurazione del sistema cookie e delle relative preferenze viene effettuata nel rispetto del principio di protezione dei dati fin dalla progettazione e per impostazione predefinita, ai sensi dell&apos;art. 25 GDPR.
+            </p>
+          </section>
 
-          {/* Policy Content */}
-          <div className="bg-white border-2 border-insubria-200 rounded-2xl p-8 shadow-sm">
-            <div 
-              className="prose prose-lg max-w-none prose-headings:text-insubria-600 prose-a:text-insubria-600 prose-strong:text-insubria-600"
-              dangerouslySetInnerHTML={{ __html: policy.content }}
-            />
-          </div>
+          <section>
+            <h2 className="text-2xl font-bold text-insubria-600 mb-4">Gestione del consenso</h2>
+            <p>
+              La gestione del consenso avviene nel rispetto dei principi di trasparenza e libertà di scelta dell&apos;utente, in conformità agli artt. 7, 12 e 13 GDPR, all&apos;art. 122 del Codice Privacy e alle Linee guida del Garante del 10 giugno 2021.
+            </p>
+            <p>L&apos;utente può in qualsiasi momento:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Rifiutare i cookie non necessari;</li>
+              <li>Selezionare in modo granulare le singole categorie di cookie;</li>
+              <li>Modificare successivamente le preferenze espresse tramite il pannello di controllo disponibile sul sito.</li>
+            </ul>
+          </section>
 
-          {/* Cookie Management */}
-          <div className="bg-insubria-50 border-2 border-insubria-200 rounded-2xl p-8 mt-8">
-            <h3 className="text-xl font-bold text-insubria-600 mb-4">Gestione Cookie</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-semibold text-insubria-600 mb-2">Preferenze Cookie</h4>
-                <p className="text-neutral-500 mb-4">
-                  Puoi gestire le tue preferenze sui cookie utilizzando il banner che appare al primo accesso al sito.
-                </p>
-                <CookiePreferencesButton />
-              </div>
-              <div>
-                <h4 className="font-semibold text-insubria-600 mb-2">Contatti</h4>
-                <p className="text-neutral-500">Per domande sui cookie:</p>
-                <p className="text-neutral-500">Email: privacy@jeins.it</p>
-                <p className="text-neutral-500">Telefono: +39 123 456 7890</p>
-              </div>
-            </div>
-          </div>
+          <section>
+            <h2 className="text-2xl font-bold text-insubria-600 mb-4">Aggiornamenti</h2>
+            <p>
+              La presente Cookie Policy può essere soggetta a modifiche in base a nuove normative o cambiamenti tecnici del sito. Gli utenti saranno informati di tali cambiamenti tramite la pubblicazione della versione aggiornata su questa pagina.
+            </p>
+            <p className="font-semibold mt-4">
+              Ultimo aggiornamento: Aprile 2026
+            </p>
+          </section>
         </div>
-      </section>
+      </div>
     </main>
   )
 }
