@@ -6,12 +6,12 @@ import type { Metadata } from 'next'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Contatti - JEIns | Contattaci per Consulenza e Progetti',
-  description: 'Contatta JEIns per consulenza aziendale, progetti di ricerca e collaborazioni. Siamo disponibili per aziende e studenti dell\'Università dell\'Insubria. Richiedi un preventivo gratuito.',
-  keywords: 'contatti JEIns, consulenza gratuita, preventivo JEIns, contatto Junior Enterprise, Università Insubria contatti',
+  title: 'Contatti - JEIns Consulting | Contattaci per Consulenza e Progetti',
+  description: 'Contatta JEIns Consulting per consulenza aziendale, progetti di ricerca e collaborazioni. Siamo disponibili per aziende e studenti dell\'Università dell\'Insubria. Richiedi un preventivo gratuito.',
+  keywords: 'contatti JEIns Consulting, consulenza gratuita, preventivo JEIns Consulting, contatto Junior Enterprise, Università Insubria contatti',
   openGraph: {
-    title: 'Contatti - JEIns | Contattaci per Consulenza e Progetti',
-    description: 'Contatta JEIns per consulenza aziendale e progetti di ricerca. Richiedi un preventivo gratuito.',
+    title: 'Contatti - JEIns Consulting | Contattaci per Consulenza e Progetti',
+    description: 'Contatta JEIns Consulting per consulenza aziendale e progetti di ricerca. Richiedi un preventivo gratuito.',
     url: 'https://jeins.it/contatti',
   },
   alternates: {
@@ -33,9 +33,9 @@ export default async function ContattiPage() {
   const emailContacts = contacts.filter(c => c.type === 'email')
   const phoneContacts = contacts.filter(c => c.type === 'phone')
   const addressContacts = contacts.filter(c => c.type === 'address')
-  const facebookContact = contacts.find(c => c.type === 'facebook')
   const instagramContact = contacts.find(c => c.type === 'instagram')
   const linkedinContact = contacts.find(c => c.type === 'linkedin')
+  
   return (
     <main>
       {/* Hero Section */}
@@ -154,20 +154,13 @@ export default async function ContattiPage() {
                       <span className="text-2xl">📍</span>
                     </div>
                     <h3 className="text-lg font-semibold text-insubria-600 mb-3">
-                      Sede
+                      Dove ci trovi
                     </h3>
-                    {addressContacts.map((address, index) => (
-                      <div key={address.id}>
-                        <p className="text-neutral-500 mb-1">
-                          {address.value}
-                        </p>
-                        {address.label && (
-                          <p className="text-neutral-400 text-sm mb-2">
-                            {address.label}
-                          </p>
-                        )}
-                      </div>
-                    ))}
+                    <div>
+                      <p className="text-neutral-500 mb-1">
+                        Via Monte Generoso, 71, 21100 Varese VA
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
@@ -177,58 +170,42 @@ export default async function ContattiPage() {
       )}
 
       {/* Social Media */}
-      {(facebookContact || instagramContact || linkedinContact) && (
-        <section className="py-20 section-white relative">
-          {/* Elementi decorativi */}
-          <div className="decorative-corner top-0 left-0"></div>
-          <div className="decorative-corner-bottom-right bottom-0 right-0"></div>
-          <div className="decorative-strip decorative-strip-top"></div>
-          
-          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="animate-slide-in-top">
-              <h2 className="text-3xl font-bold mb-6 newspaper-headline">
-                Seguici sui social
-              </h2>
-              <p className="text-neutral-500 text-lg mb-8">
-                Resta aggiornato sulle nostre attività e progetti
-              </p>
-              
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                {facebookContact && (
-                  <a 
-                    href={facebookContact.value} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cta-secondary"
-                  >
-                    Facebook
-                  </a>
-                )}
-                {instagramContact && (
-                  <a 
-                    href={instagramContact.value} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cta-secondary"
-                  >
-                    Instagram
-                  </a>
-                )}
-                {linkedinContact && (
-                  <a 
-                    href={linkedinContact.value} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cta-secondary"
-                  >
-                    LinkedIn
-                  </a>
-                )}
-              </div>
+      <section className="py-20 section-white relative">
+        {/* Elementi decorativi */}
+        <div className="decorative-corner top-0 left-0"></div>
+        <div className="decorative-corner-bottom-right bottom-0 right-0"></div>
+        <div className="decorative-strip decorative-strip-top"></div>
+        
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="animate-slide-in-top">
+            <h2 className="text-3xl font-bold mb-6 newspaper-headline">
+              Seguici sui social
+            </h2>
+            <p className="text-neutral-500 text-lg mb-8">
+              Resta aggiornato sulle nostre attività e progetti
+            </p>
+            
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+              <a 
+                href={instagramContact?.value || "#"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="cta-secondary"
+              >
+                Instagram
+              </a>
+              <a 
+                href={linkedinContact?.value || "#"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="cta-secondary"
+              >
+                LinkedIn
+              </a>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </main>
   )
 }

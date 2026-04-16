@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Instagram, Linkedin } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 async function getContacts() {
@@ -16,9 +16,9 @@ export default async function Footer() {
   const emailContact = contacts.find(c => c.type === 'email')
   const phoneContact = contacts.find(c => c.type === 'phone')
   const addressContact = contacts.find(c => c.type === 'address')
-  const facebookContact = contacts.find(c => c.type === 'facebook')
   const instagramContact = contacts.find(c => c.type === 'instagram')
   const linkedinContact = contacts.find(c => c.type === 'linkedin')
+
   return (
     <footer className="bg-insubria-50 border-t border-neutral-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -52,21 +52,12 @@ export default async function Footer() {
           <div>
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Seguici</h3>
             <div className="flex space-x-4">
-              {facebookContact && (
-                <a href={facebookContact.value} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
-                  <Facebook size={20} />
-                </a>
-              )}
-              {instagramContact && (
-                <a href={instagramContact.value} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
-                  <Instagram size={20} />
-                </a>
-              )}
-              {linkedinContact && (
-                <a href={linkedinContact.value} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
-                  <Linkedin size={20} />
-                </a>
-              )}
+              <a href={instagramContact?.value || "#"} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
+                <Instagram size={20} />
+              </a>
+              <a href={linkedinContact?.value || "#"} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-insubria-600 transition-colors">
+                <Linkedin size={20} />
+              </a>
             </div>
           </div>
 
@@ -106,9 +97,12 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-neutral-100 mt-8 pt-8 text-center">
-          <p className="text-neutral-500">
-            © 2024 JEIns - Junior Enterprise Insubria. Tutti i diritti riservati.
+        <div className="border-t border-neutral-100 mt-8 pt-8 text-center space-y-2">
+          <p className="text-neutral-500 font-medium">
+            Sede legale: Via Stefano da Seregno n.31, 20831 Seregno (MB) | P.IVA 14402760962
+          </p>
+          <p className="text-neutral-500 text-sm">
+            © 2024 JEIns Consulting - Junior Enterprise Insubria. Tutti i diritti riservati.
           </p>
         </div>
       </div>

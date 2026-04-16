@@ -1,154 +1,309 @@
-import type { Metadata } from 'next'
-import type { BlogPost } from '@prisma/client'
+import Hero from '@/components/Hero'
+import ServiceCard from '@/components/ServiceCard'
+import StatsCard from '@/components/StatsCard'
+import PortfolioCard from '@/components/PortfolioCard'
+import NewsletterBox from '@/components/NewsletterBox'
+import ContactForm from '@/components/ContactForm'
 import { prisma } from '@/lib/prisma'
-import { Calendar, User, Tag, ArrowRight } from 'lucide-react'
-import Link from 'next/link'
-import Image from 'next/image'
 
-// Ricarica i dati ogni 60 secondi
+// Ricarica i dati ogni 60 secondi (ISR - Incremental Static Regeneration)
 export const revalidate = 60
 
-export const metadata: Metadata = {
-  title: 'Blog - JEIns | Articoli e News sulla Junior Enterprise',
-  description: 'Scopri gli ultimi articoli e news di JEIns. Approfondimenti su consulenza aziendale, progetti universitari, eventi e opportunità per studenti dell\'Università dell\'Insubria.',
-  keywords: 'blog JEIns, articoli Junior Enterprise, news università, progetti studenti, consulenza aziendale blog',
-  openGraph: {
-    title: 'Blog - JEIns | Articoli e News sulla Junior Enterprise',
-    description: 'Scopri gli ultimi articoli e news di JEIns su consulenza aziendale e progetti universitari.',
-    url: 'https://jeins.it/blog',
-  },
-  alternates: {
-    canonical: 'https://jeins.it/blog',
-  },
+async function getHomeData() {
+  const [services, projects, stats, sections] = await Promise.all([
+    prisma.service.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' },
+      take: 3
+    }),
+    prisma.project.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' },
+      take: 6
+    }),
+    {
+      projects: await prisma.project.count({ where: { isActive: true } }),
+      services: await prisma.service.count({ where: { isActive: true } }),
+      applications: await prisma.recruitmentApplication.count(),
+      team: 35 // Numero membri aggiornato
+    },
+    prisma.homeSection.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' }
+    })
+  ])
+
+  return { services, projects, stats, sections }
 }
 
-async function getPublishedPosts() {
-  return await prisma.blogPost.findMany({
-    where: { isPublished: true },
-    orderBy: { publishedAt: 'desc' },
-    take: 6
-  })
-}
+export default async function HomePage() {
+  const { services, projects, stats, sections } = await getHomeData()
+  
+  // Crea un oggetto per accedere facilmente alle configurazioni delle sezioni
+  const sectionConfig = sections.reduce((acc, section) => {
+    acc[section.name] = section
+    return acc
+  }, {} as Record<string, any>)
 
-export default async function BlogPage() {
-  const posts = await getPublishedPosts()
+  // Servizi hardcoded come da richiesta
+  const staticServices = [
+    {
+      id: 'strategy',
+      sector: 'STRATEGY',
+      title: 'Business Plan',
+      description: 'Ti supportiamo nell’analisi del contesto, nella definizione del modello di business e nella costruzione di un piano chiaro e strutturato. Un servizio pensato per startup, PMI e realtà che vogliono orientare meglio scelte, investimenti e crescita.'
+    },
+    {
+      id: 'it',
+      sector: 'IT',
+      title: 'Soluzioni digitali su misura',
+      description: 'Progettiamo e sviluppiamo strumenti digitali pensati per migliorare processi, funzionalità ed efficacia operativa. Dall’e-commerce alle web app, fino a database, aggiornamenti e manutenzione, costruiamo soluzioni pratiche e coerenti con le esigenze del progetto.'
+    },
+    {
+      id: 'marketing',
+      sector: 'MARKETING',
+      title: 'Comunicazione & Marketing Compass',
+      description: 'Aiutiamo organizzazioni e professionisti a comunicare in modo più chiaro, coerente ed efficace. Analizziamo posizionamento, comunicazione e presenza digitale per individuare linee guida concrete e rafforzare la visibilità del brand.'
+    }
+  ]
 
   return (
     <main>
       {/* Hero Section */}
-      <section className="py-20 section-green relative overflow-hidden">
-        {/* Elementi decorativi */}
-        <div className="decorative-corner top-0 right-0" style={{clipPath: 'polygon(100% 0, 100% 100%, 0 0)'}}></div>
-        <div className="decorative-corner-bottom-right bottom-0 left-0" style={{clipPath: 'polygon(0 0, 100% 100%, 0 100%)'}}></div>
-        <div className="decorative-strip decorative-strip-bottom"></div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 newspaper-headline">
-            Blog JEIns
-          </h1>
-          <p className="text-xl max-w-3xl mx-auto">
-            Scopri gli ultimi articoli, approfondimenti e novità dal mondo delle Junior Enterprise
-          </p>
-        </div>
-      </section>
+      {sectionConfig.hero?.isActive && (
+        <Hero
+          title="JEIns Consulting"
+          subtitle="La realtà che unisce il mondo accademico a quello del lavoro"
+          primaryCta="Richiedi un preventivo"
+          secondaryCta="Unisciti a noi"
+          primaryCtaHref="/contatti"
+          secondaryCtaHref="/recruitment"
+          backgroundImage="/images/hero-universita.jpg"
+        />
+      )}
 
-      {/* Blog Posts */}
-      <section className="py-16 section-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Ultimi Articoli
-            </h2>
-            <p className="text-lg text-gray-600">
-              Approfondimenti, guide e novità dal team JEIns
-            </p>
+      {/* Servizi in evidenza */}
+      {sectionConfig.services?.isActive && (
+        <section className="py-20 section-white relative overflow-hidden">
+          {/* Elementi decorativi */}
+          <div className="decorative-corner top-0 left-0"></div>
+          <div className="decorative-corner-bottom-right bottom-0 right-0"></div>
+          <div className="decorative-strip decorative-strip-top"></div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-slide-in-top">
+              <h2 className="text-4xl font-bold mb-6 newspaper-headline">
+                {sectionConfig.services.title || 'I nostri servizi'}
+              </h2>
+              <p className="text-neutral-500 text-xl max-w-3xl mx-auto">
+                {sectionConfig.services.subtitle || 'Soluzioni innovative e personalizzate per aziende di ogni dimensione. Il nostro team di studenti qualificati offre consulenza professionale in diversi settori.'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
+              {staticServices.map((service, index) => (
+                <div key={service.id} className="animate-fade-in-left hover-lift h-full w-full" style={{animationDelay: `${index * 0.1}s`}}>
+                  <div className="bg-white border-2 border-insubria-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow duration-300 h-full flex flex-col overflow-hidden">
+                    <div className="mb-4">
+                      <span className="bg-insubria-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {service.sector}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-insubria-600 mb-3">
+                      {service.title}
+                    </h3>
+                    <p className="text-neutral-500 mb-4 flex-grow">
+                      {service.description}
+                    </p>
+                    <a
+                      href="/contatti"
+                      className="inline-block text-insubria-600 font-medium hover:text-insubria-700 transition-colors mt-auto"
+                    >
+                      Richiedi un preventivo →
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
+      )}
 
-          {posts.length > 0 ? (
+      {/* I nostri numeri */}
+      {sectionConfig.stats?.isActive && (
+        <section className="py-20 section-green relative">
+          {/* Elementi decorativi */}
+          <div className="decorative-corner top-0 right-0" style={{clipPath: 'polygon(100% 0, 100% 100%, 0 0)'}}></div>
+          <div className="decorative-corner-bottom-right bottom-0 left-0" style={{clipPath: 'polygon(0 0, 100% 100%, 0 100%)'}}></div>
+          <div className="decorative-strip decorative-strip-bottom"></div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-slide-in-bottom">
+              <h2 className="text-4xl font-bold mb-6 newspaper-headline">
+                {sectionConfig.stats.title || 'I nostri numeri'}
+              </h2>
+              <p className="text-xl max-w-3xl mx-auto">
+                {sectionConfig.stats.subtitle || 'Risultati che testimoniano il nostro impegno e la nostra crescita nel territorio insubre'}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="animate-scale-in hover-lift">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                    {stats.projects}+
+                  </div>
+                  <div className="text-lg font-semibold mb-1">
+                    Progetti completati
+                  </div>
+                  <div className="text-sm opacity-90">
+                    Con successo
+                  </div>
+                </div>
+              </div>
+              <div className="animate-scale-in hover-lift" style={{animationDelay: '0.1s'}}>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                    {stats.services}+
+                  </div>
+                  <div className="text-lg font-semibold mb-1">
+                    Servizi offerti
+                  </div>
+                  <div className="text-sm opacity-90">
+                    Soddisfatte
+                  </div>
+                </div>
+              </div>
+              <div className="animate-scale-in hover-lift" style={{animationDelay: '0.2s'}}>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                    {stats.team}+
+                  </div>
+                  <div className="text-lg font-semibold mb-1">
+                    Membri attivi
+                  </div>
+                  <div className="text-sm opacity-90">
+                    Studenti motivati
+                  </div>
+                </div>
+              </div>
+              <div className="animate-scale-in hover-lift" style={{animationDelay: '0.3s'}}>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                    {stats.applications}
+                  </div>
+                  <div className="text-lg font-semibold mb-1">
+                    Candidature
+                  </div>
+                  <div className="text-sm opacity-90">
+                    Nel settore
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Portfolio/Case Studies */}
+      {sectionConfig.portfolio?.isActive && (
+        <section className="py-20 section-green-light relative">
+          {/* Elementi decorativi */}
+          <div className="decorative-corner top-0 left-0"></div>
+          <div className="decorative-corner-bottom-right bottom-0 right-0"></div>
+          <div className="decorative-strip decorative-strip-top"></div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-zoom-in">
+              <h2 className="text-4xl font-bold mb-6 newspaper-headline">
+                {sectionConfig.portfolio.title || 'I nostri progetti'}
+              </h2>
+              <p className="text-neutral-500 text-xl max-w-3xl mx-auto">
+                {sectionConfig.portfolio.subtitle || 'Alcuni esempi dei progetti che abbiamo realizzato per i nostri clienti, dimostrando la nostra capacità di innovazione e problem solving.'}
+              </p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-              {posts.map((post: BlogPost) => {
-                const tags = post.tags ? JSON.parse(post.tags) : []
+              {projects.map((project, index) => {
+                const tags = project.tags ? JSON.parse(project.tags) : []
                 return (
-                  <article key={post.id} className="bg-white border-2 border-insubria-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow w-full h-full flex flex-col">
-                    {post.featuredImage && (
-                      <div className="aspect-video w-full">
-                        <Image
-                          src={post.featuredImage}
-                          alt={post.title}
-                          width={400}
-                          height={225}
-                          className="w-full h-full object-cover"
-                        />
+                  <div key={project.id} className="animate-fade-in-left hover-lift h-full card-standard" style={{animationDelay: `${index * 0.1}s`}}>
+                    <div className="bg-white border-2 border-insubria-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                      <div className="h-48 bg-insubria-50 flex items-center justify-center">
+                        {project.image ? (
+                          <img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="text-insubria-600 text-center">
+                            <div className="text-4xl mb-2">📊</div>
+                            <div className="text-sm font-medium">{project.title}</div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                    
-                    <div className="p-6 flex-grow flex flex-col">
-                      <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{new Date(post.publishedAt || post.createdAt).toLocaleDateString('it-IT')}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
-                          <span>JEIns Team</span>
-                        </div>
-                      </div>
-
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
-                        {post.title}
-                      </h3>
-
-                      {post.excerpt && (
-                        <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
-                          {post.excerpt}
+                      <div className="p-6 flex-grow flex flex-col">
+                        <p className="text-sm text-insubria-600 font-medium mb-2">
+                          {project.client || 'JEIns Consulting'}
                         </p>
-                      )}
-
-                      {tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4 mt-auto">
-                          {tags.slice(0, 3).map((tag: string, index: number) => (
-                            <span
-                              key={index}
-                              className="inline-flex px-2 py-1 bg-insubria-100 text-insubria-800 rounded-full text-xs font-medium"
-                            >
+                        <h3 className="text-lg font-semibold text-insubria-600 mb-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-neutral-500 mb-4 flex-grow">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mt-auto">
+                          {tags.slice(0, 3).map((tag: string, tagIndex: number) => (
+                            <span key={tagIndex} className="bg-insubria-50 text-insubria-600 px-2 py-1 rounded text-xs">
                               {tag}
                             </span>
                           ))}
-                          {tags.length > 3 && (
-                            <span className="text-xs text-gray-500">
-                              +{tags.length - 3} altri
-                            </span>
-                          )}
                         </div>
-                      )}
-
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="inline-flex items-center gap-2 text-insubria-600 hover:text-insubria-700 font-medium transition-colors"
-                      >
-                        Leggi tutto
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
+                      </div>
                     </div>
-                  </article>
+                  </div>
                 )
               })}
             </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
-                <Tag className="h-12 w-12" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Nessun articolo pubblicato
-              </h3>
-              <p className="text-gray-500">
-                Gli articoli del blog saranno disponibili presto.
-              </p>
+          </div>
+        </section>
+      )}
+
+      {/* Newsletter */}
+      {sectionConfig.newsletter?.isActive && (
+        <section className="py-20 section-green relative overflow-hidden">
+          {/* Elementi decorativi */}
+          <div className="decorative-corner top-0 right-0" style={{clipPath: 'polygon(100% 0, 100% 100%, 0 0)'}}></div>
+          <div className="decorative-corner-bottom-right bottom-0 left-0" style={{clipPath: 'polygon(0 0, 100% 100%, 0 100%)'}}></div>
+          <div className="decorative-strip decorative-strip-bottom"></div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-fade-in-up">
+              <NewsletterBox />
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
+
+      {/* Contatto rapido */}
+      {sectionConfig.contact?.isActive && (
+        <section className="py-20 section-white relative">
+          {/* Elementi decorativi */}
+          <div className="decorative-corner top-0 left-0"></div>
+          <div className="decorative-corner-bottom-right bottom-0 right-0"></div>
+          <div className="decorative-strip decorative-strip-top"></div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-fade-in-up">
+              <ContactForm
+                title={sectionConfig.contact.title || "Contatto rapido"}
+                description={sectionConfig.contact.subtitle || "Hai un progetto in mente? Contattaci per una consulenza gratuita e scopri come possiamo aiutarti a raggiungere i tuoi obiettivi."}
+              />
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   )
 }
