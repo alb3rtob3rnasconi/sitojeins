@@ -25,7 +25,7 @@ async function getHomeData() {
       projects: await prisma.project.count({ where: { isActive: true } }),
       services: await prisma.service.count({ where: { isActive: true } }),
       applications: await prisma.recruitmentApplication.count(),
-      team: 15 // Placeholder per ora
+      team: 35 // Numero membri aggiornato
     },
     prisma.homeSection.findMany({
       where: { isActive: true },
@@ -45,13 +45,35 @@ export default async function HomePage() {
     return acc
   }, {} as Record<string, any>)
 
+  // Servizi hardcoded come da richiesta
+  const staticServices = [
+    {
+      id: 'strategy',
+      sector: 'STRATEGY',
+      title: 'Business Plan',
+      description: 'Ti supportiamo nell’analisi del contesto, nella definizione del modello di business e nella costruzione di un piano chiaro e strutturato. Un servizio pensato per startup, PMI e realtà che vogliono orientare meglio scelte, investimenti e crescita.'
+    },
+    {
+      id: 'it',
+      sector: 'IT',
+      title: 'Soluzioni digitali su misura',
+      description: 'Progettiamo e sviluppiamo strumenti digitali pensati per migliorare processi, funzionalità ed efficacia operativa. Dall’e-commerce alle web app, fino a database, aggiornamenti e manutenzione, costruiamo soluzioni pratiche e coerenti con le esigenze del progetto.'
+    },
+    {
+      id: 'marketing',
+      sector: 'MARKETING',
+      title: 'Comunicazione & Marketing Compass',
+      description: 'Aiutiamo organizzazioni e professionisti a comunicare in modo più chiaro, coerente ed efficace. Analizziamo posizionamento, comunicazione e presenza digitale per individuare linee guida concrete e rafforzare la visibilità del brand.'
+    }
+  ]
+
   return (
     <main>
       {/* Hero Section */}
       {sectionConfig.hero?.isActive && (
         <Hero
-          title={sectionConfig.hero.title || "Mostriamo il valore degli studenti dell'Insubria"}
-          subtitle={sectionConfig.hero.subtitle || 'Consulenza, progetti e crescita: per aziende e studenti'}
+          title="JEIns Consulting"
+          subtitle="La realtà che unisce il mondo accademico a quello del lavoro"
           primaryCta="Richiedi un preventivo"
           secondaryCta="Unisciti a noi"
           primaryCtaHref="/contatti"
@@ -79,7 +101,7 @@ export default async function HomePage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
-              {services.map((service, index) => (
+              {staticServices.map((service, index) => (
                 <div key={service.id} className="animate-fade-in-left hover-lift h-full w-full" style={{animationDelay: `${index * 0.1}s`}}>
                   <div className="bg-white border-2 border-insubria-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-shadow duration-300 h-full flex flex-col overflow-hidden">
                     <div className="mb-4">
@@ -223,7 +245,7 @@ export default async function HomePage() {
                       </div>
                       <div className="p-6 flex-grow flex flex-col">
                         <p className="text-sm text-insubria-600 font-medium mb-2">
-                          {project.client || 'JEIns'}
+                          {project.client || 'JEIns Consulting'}
                         </p>
                         <h3 className="text-lg font-semibold text-insubria-600 mb-2">
                           {project.title}
