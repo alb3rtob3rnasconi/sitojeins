@@ -5,14 +5,16 @@ import type { Metadata } from 'next'
 // Ricarica i dati ogni 60 secondi
 export const revalidate = 60
 
+// Meta dati ottimizzati per SEO
 export const metadata: Metadata = {
-  title: 'Recruitment - JEIns Consulting | Unisciti al Nostro Team di Studenti',
-  description: 'Candidati per entrare a far parte di JEIns Consulting! Offriamo opportunità di crescita professionale, progetti reali e esperienza pratica per studenti dell\'Università dell\'Insubria.',
-  keywords: 'recruitment JEIns Consulting, candidature studenti, opportunità lavoro universitario, team JEIns Consulting, posizioni aperte',
+  title: 'Unisciti al Team | Recruitment - JEIns Consulting',
+  description: 'Mostriamo il valore degli studenti dell\'Insubria. Candidati per entrare in JEIns Consulting: consulenza, progetti reali e crescita per la tua carriera universitaria.',
+  keywords: 'recruitment JEIns Consulting, candidature studenti Insubria, Junior Enterprise Varese, consulenza aziendale studenti, opportunità crescita universitaria, progetti reali',
   openGraph: {
-    title: 'Recruitment - JEIns Consulting | Unisciti al Nostro Team di Studenti',
-    description: 'Candidati per entrare a far parte di JEIns Consulting! Opportunità di crescita professionale per studenti dell\'Università dell\'Insubria.',
+    title: 'Unisciti a JEIns Consulting | Recruitment Studenti Insubria',
+    description: 'Consulenza, progetti e crescita. Sviluppa le tue competenze professionali lavorando su progetti reali durante il tuo percorso universitario.',
     url: 'https://jeins.it/recruitment',
+    type: 'website',
   },
   alternates: {
     canonical: 'https://jeins.it/recruitment',

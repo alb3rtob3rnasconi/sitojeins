@@ -8,14 +8,16 @@ import Image from 'next/image'
 // Ricarica i dati ogni 60 secondi
 export const revalidate = 60
 
+// Meta dati ottimizzati per SEO
 export const metadata: Metadata = {
-  title: 'Blog - JEIns | Articoli e News sulla Junior Enterprise',
-  description: 'Scopri gli ultimi articoli e news di JEIns. Approfondimenti su consulenza aziendale, progetti universitari, eventi e opportunità per studenti dell\'Università dell\'Insubria.',
-  keywords: 'blog JEIns, articoli Junior Enterprise, news università, progetti studenti, consulenza aziendale blog',
+  title: 'Blog | Articoli, News e Approfondimenti - JEIns Consulting',
+  description: 'Scopri gli articoli del blog di JEIns Consulting. Approfondimenti su strategia d\'impresa, marketing digitale, soluzioni IT e le ultime novità della nostra Junior Enterprise.',
+  keywords: 'blog JEIns Consulting, articoli consulenza aziendale, news Junior Enterprise Insubria, digital marketing blog Varese, approfondimenti IT, business plan startup',
   openGraph: {
-    title: 'Blog - JEIns | Articoli e News sulla Junior Enterprise',
-    description: 'Scopri gli ultimi articoli e news di JEIns su consulenza aziendale e progetti universitari.',
+    title: 'Blog - JEIns Consulting | News e Approfondimenti',
+    description: 'Resta aggiornato sulle ultime novità, guide e approfondimenti dal team di JEIns Consulting.',
     url: 'https://jeins.it/blog',
+    type: 'website',
   },
   alternates: {
     canonical: 'https://jeins.it/blog',
@@ -44,10 +46,10 @@ export default async function BlogPage() {
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 newspaper-headline">
-            Blog JEIns
+            Blog JEIns Consulting
           </h1>
           <p className="text-xl max-w-3xl mx-auto">
-            Scopri gli ultimi articoli, approfondimenti e novità dal mondo delle Junior Enterprise
+            Scopri gli ultimi articoli, approfondimenti e novità dal mondo della nostra Junior Enterprise
           </p>
         </div>
       </section>
@@ -60,7 +62,7 @@ export default async function BlogPage() {
               Ultimi Articoli
             </h2>
             <p className="text-lg text-gray-600">
-              Approfondimenti, guide e novità dal team JEIns
+              Approfondimenti, guide e novità dal team JEIns Consulting
             </p>
           </div>
 
@@ -90,7 +92,7 @@ export default async function BlogPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <User className="h-4 w-4" />
-                          <span>JEIns Team</span>
+                          <span>JEIns Consulting</span>
                         </div>
                       </div>
 

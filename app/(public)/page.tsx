@@ -5,6 +5,19 @@ import PortfolioCard from '@/components/PortfolioCard'
 import NewsletterBox from '@/components/NewsletterBox'
 import ContactForm from '@/components/ContactForm'
 import { prisma } from '@/lib/prisma'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Consulenza Strategica, IT e Marketing per PMI e Startup',
+  description: 'JEIns Consulting è la Junior Enterprise dell\'Università dell\'Insubria. Supportiamo la crescita di aziende e startup con Business Plan, soluzioni IT su misura e strategie di marketing.',
+  keywords: 'Consulenza Varese, Junior Enterprise Insubria, Business Plan Startup, Sviluppo Web PMI, Marketing Digitale Varese',
+  openGraph: {
+    title: 'JEIns Consulting | Consulenza Strategica, IT e Marketing',
+    description: 'Trasformiamo il valore accademico in soluzioni professionali per il business.',
+    url: 'https://www.jeins.it/',
+    type: 'website',
+  },
+}
 
 // Ricarica i dati ogni 60 secondi (ISR - Incremental Static Regeneration)
 export const revalidate = 60

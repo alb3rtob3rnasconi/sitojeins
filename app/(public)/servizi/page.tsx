@@ -5,14 +5,16 @@ import type { Metadata } from 'next'
 // Ricarica i dati ogni 60 secondi
 export const revalidate = 60
 
+// Meta dati ottimizzati per SEO globale
 export const metadata: Metadata = {
-  title: 'Servizi - JEIns | Consulenza Aziendale e Progetti Universitari',
-  description: 'Scopri i servizi di JEIns: consulenza aziendale, sviluppo web, marketing digitale, business consulting e progetti di ricerca. Soluzioni innovative per aziende e opportunità di crescita per studenti.',
-  keywords: 'servizi JEIns, consulenza aziendale, sviluppo web, marketing digitale, business consulting, progetti universitari, servizi studenti',
+  title: 'Servizi di Consulenza: Strategy, IT e Marketing',
+  description: 'Scopri i servizi di JEIns Consulting: consulenza strategica (Business Plan), soluzioni digitali su misura e strategie di comunicazione e marketing per PMI e startup.',
+  keywords: 'servizi JEIns Consulting, consulenza aziendale, sviluppo web, marketing digitale, business plan startup, progetti universitari Varese, soluzioni digitali',
   openGraph: {
-    title: 'Servizi - JEIns | Consulenza Aziendale e Progetti Universitari',
-    description: 'Scopri i servizi di JEIns: consulenza aziendale, sviluppo web, marketing digitale e business consulting.',
+    title: 'Servizi - JEIns Consulting | Strategy, IT e Marketing',
+    description: 'Soluzioni innovative e personalizzate per aziende di ogni dimensione. Scopri come possiamo aiutarti a crescere.',
     url: 'https://jeins.it/servizi',
+    type: 'website',
   },
   alternates: {
     canonical: 'https://jeins.it/servizi',

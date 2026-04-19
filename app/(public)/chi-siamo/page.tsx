@@ -1,20 +1,21 @@
 import { Target, Eye, Users, Award, CheckCircle } from 'lucide-react'
 import TeamMember from '@/components/TeamMember'
 import { prisma } from '@/lib/prisma'
-
 import type { Metadata } from 'next'
 
 // Ricarica i dati ogni 60 secondi
 export const revalidate = 60
 
+// Meta dati ottimizzati per SEO
 export const metadata: Metadata = {
-  title: 'Chi Siamo - JEIns | Il Team e la Nostra Missione',
-  description: 'Scopri JEIns, la Junior Enterprise dell\'Università dell\'Insubria. Conosci il nostro team di studenti motivati, la nostra missione e i valori che ci guidano nel fornire consulenza aziendale di qualità.',
-  keywords: 'team JEIns, missione Junior Enterprise, valori universitari, studenti Insubria, chi siamo JEIns',
+  title: 'Chi Siamo | Il Team e la Nostra Missione - JEIns Consulting',
+  description: 'Scopri JEIns Consulting, la Junior Enterprise dell\'Università dell\'Insubria. Un ponte tra accademia e mondo del lavoro per offrire consulenza innovativa alle PMI.',
+  keywords: 'team JEIns Consulting, Junior Enterprise Insubria, consulenza studenti Varese, missione JEIns, valori università Insubria, chi siamo JEIns Consulting',
   openGraph: {
-    title: 'Chi Siamo - JEIns | Il Team e la Nostra Missione',
-    description: 'Scopri JEIns, la Junior Enterprise dell\'Università dell\'Insubria. Conosci il nostro team di studenti motivati e la nostra missione.',
+    title: 'Chi Siamo - JEIns Consulting | Junior Enterprise Insubria',
+    description: 'La realtà che unisce il mondo accademico a quello del lavoro. Conosci il nostro team e la nostra missione.',
     url: 'https://jeins.it/chi-siamo',
+    type: 'website',
   },
   alternates: {
     canonical: 'https://jeins.it/chi-siamo',
@@ -47,7 +48,7 @@ export default async function ChiSiamoPage() {
               <span className="text-white">Chi</span> <span className="text-white">siamo</span>
             </h1>
             <p className="text-xl max-w-3xl mx-auto">
-              JEIns è la Junior Enterprise dell&apos;Università degli Studi dell&apos;Insubria, 
+              JEIns Consulting è la Junior Enterprise dell&apos;Università degli Studi dell&apos;Insubria, 
               un ponte tra il mondo accademico e quello professionale.
             </p>
           </div>
@@ -184,7 +185,7 @@ export default async function ChiSiamoPage() {
               Il nostro team
             </h2>
             <p className="text-neutral-500 text-xl max-w-3xl mx-auto">
-              Gli studenti che rendono possibile JEIns e che portano innovazione 
+              Gli studenti che rendono possibile JEIns Consulting e che portano innovazione 
               nel territorio insubre
             </p>
           </div>

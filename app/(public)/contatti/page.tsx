@@ -5,14 +5,16 @@ import type { Metadata } from 'next'
 // Ricarica i dati ogni 60 secondi
 export const revalidate = 60
 
+// Meta dati ottimizzati per SEO
 export const metadata: Metadata = {
-  title: 'Contatti - JEIns Consulting | Contattaci per Consulenza e Progetti',
-  description: 'Contatta JEIns Consulting per consulenza aziendale, progetti di ricerca e collaborazioni. Siamo disponibili per aziende e studenti dell\'Università dell\'Insubria. Richiedi un preventivo gratuito.',
-  keywords: 'contatti JEIns Consulting, consulenza gratuita, preventivo JEIns Consulting, contatto Junior Enterprise, Università Insubria contatti',
+  title: 'Contatti | Richiedi una Consulenza Gratuita - JEIns Consulting',
+  description: 'Hai un progetto in mente? Contatta JEIns Consulting per una consulenza gratuita su Business Plan, soluzioni IT e Digital Marketing. Supportiamo startup e PMI.',
+  keywords: 'contatti JEIns Consulting, consulenza aziendale Varese, preventivo gratuito PMI, Junior Enterprise Insubria contatti, agenzia consulenza Varese',
   openGraph: {
-    title: 'Contatti - JEIns Consulting | Contattaci per Consulenza e Progetti',
-    description: 'Contatta JEIns Consulting per consulenza aziendale e progetti di ricerca. Richiedi un preventivo gratuito.',
+    title: 'Contatta JEIns Consulting | Consulenza per PMI e Startup',
+    description: 'Siamo disponibili per aziende e professionisti. Contattaci per un preventivo gratuito e scopri le nostre soluzioni su misura.',
     url: 'https://jeins.it/contatti',
+    type: 'website',
   },
   alternates: {
     canonical: 'https://jeins.it/contatti',
