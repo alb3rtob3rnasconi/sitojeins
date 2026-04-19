@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import AuthProvider from '@/components/AuthProvider'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
 import CookiePreferencesButton from '@/components/CookiePreferencesButton'
 import StructuredData from '@/components/StructuredData'
@@ -56,13 +54,8 @@ export default function RootLayout({
           {/* Dati strutturati per Google */}
           <StructuredData />
           
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <div className="flex-grow">
-              {children}
-            </div>
-            <Footer />
-          </div>
+          {children}
+          
           <CookieBanner />
           <CookiePreferencesButton />
         </AuthProvider>
