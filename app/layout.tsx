@@ -1,64 +1,46 @@
 import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
+import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import CookiePreferencesButton from '@/components/CookiePreferencesButton'
 import StructuredData from '@/components/StructuredData'
-import AuthProvider from '@/components/AuthProvider'
 
-const montserrat = Montserrat({ 
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-montserrat'
-})
+const inter = Inter({ subsets: ['latin'] })
 
+// Meta dati ottimizzati per SEO globale con verifica Google Search Console
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jeins.it'),
-  title: 'JEIns - Junior Enterprise Insubria | Consulenza e Progetti Universitari',
-  description: 'JEIns è la Junior Enterprise dell\'Università dell\'Insubria. Offriamo consulenza aziendale, progetti di ricerca e opportunità di crescita per studenti e aziende. Scopri i nostri servizi di marketing, sviluppo web e business consulting.',
-  keywords: 'Junior Enterprise, Università Insubria, consulenza aziendale, progetti universitari, studenti, business consulting, marketing, sviluppo web, Varese, Como',
-  authors: [{ name: 'JEIns - Junior Enterprise Insubria' }],
-  creator: 'JEIns - Junior Enterprise Insubria',
-  publisher: 'JEIns - Junior Enterprise Insubria',
+  title: {
+    default: 'JEIns Consulting | Junior Enterprise Insubria',
+    template: '%s | JEIns Consulting'
+  },
+  description: 'Consulenza strategica, IT e marketing per startup e PMI. La Junior Enterprise dell\'Università dell\'Insubria che unisce accademia e business.',
+  keywords: ['Consulenza aziendale', 'Junior Enterprise', 'Varese', 'Insubria', 'Business Plan', 'Digital Marketing', 'Sviluppo Software'],
+  authors: [{ name: 'JEIns Consulting' }],
+  creator: 'JEIns Consulting',
+  publisher: 'JEIns Consulting',
+  openGraph: {
+    type: 'website',
+    locale: 'it_IT',
+    url: 'https://www.jeins.it/',
+    siteName: 'JEIns Consulting',
+    images: [
+      {
+        url: '/images/logo-jeins.png', 
+        width: 1200,
+        height: 630,
+        alt: 'JEIns Consulting - Junior Enterprise Insubria',
+      },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
-    title: 'JEIns - Junior Enterprise Insubria | Consulenza e Progetti Universitari',
-    description: 'JEIns è la Junior Enterprise dell\'Università dell\'Insubria. Offriamo consulenza aziendale, progetti di ricerca e opportunità di crescita per studenti e aziende.',
-    url: 'https://jeins.it',
-    siteName: 'JEIns - Junior Enterprise Insubria',
-    images: [
-      {
-        url: '/images/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'JEIns - Junior Enterprise Insubria',
-      },
-    ],
-    locale: 'it_IT',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'JEIns - Junior Enterprise Insubria',
-    description: 'Consulenza aziendale e progetti universitari per studenti e aziende dell\'Università dell\'Insubria.',
-    images: ['/images/og-image.jpg'],
   },
   verification: {
-    google: 'your-google-verification-code',
-  },
-  alternates: {
-    canonical: 'https://jeins.it',
+    google: 'TgZ2_3Wwonrry8E7LILZxS3r5mqGBzEC-F_llfRRXBU',
   },
 }
 
@@ -69,13 +51,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="it">
-      <head>
-        <StructuredData />
-      </head>
-      <body className={`${montserrat.variable} font-montserrat antialiased`}>
+      <body className={inter.className}>
         <AuthProvider>
-          {children}
+          {/* Dati strutturati per Google */}
+          <StructuredData />
+          
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <div className="flex-grow">
+              {children}
+            </div>
+            <Footer />
+          </div>
           <CookieBanner />
+          <CookiePreferencesButton />
         </AuthProvider>
       </body>
     </html>
